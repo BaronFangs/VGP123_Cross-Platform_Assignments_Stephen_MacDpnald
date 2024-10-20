@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: PlayArea
+    uniqueID: 2050430327
+    locked: 0
+  - name: Forground
+    uniqueID: 4052670125
+    locked: 0
