@@ -1,24 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Powerup : MonoBehaviour, IPickup
 {
-    public void Pickup(GameObject Player)
+    public void Pickup(GameObject player)
     {
-        PlayerController pc = GetComponent<PlayerController>();
-        pc.JumpPowerUp();
-        Destroy(gameObject);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        PlayerController pc = player.GetComponent<PlayerController>();
+        pc.JumpPowerUp(); // Trigger the jump power-up effect
+        Destroy(gameObject); // Destroys the power-up on collision with the player
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        if (collision.CompareTag("Player"))
+        {
+            Pickup(collision.gameObject); // Call Pickup when the player collides
+        }
     }
 }
