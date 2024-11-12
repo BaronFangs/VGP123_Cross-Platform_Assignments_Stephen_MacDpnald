@@ -38,28 +38,28 @@ public class Jump : MonoBehaviour
 
         if (Input.GetButtonDown("Jump")) jumpInputTime = Time.time;
         if (Input.GetButton("Jump")) timeHeld += Time.deltaTime;
-        if (Input.GetButtonUp("Jump")) 
+        if (Input.GetButtonUp("Jump"))
         {
             timeHeld = 0;
             jumpInputTime = 0;
 
             if (rb.velocity.y < -10) return;
             jumpCancelled = true;
-            
+
 
 
         }
 
         if (jumpInputTime != 0 && (jumpInputTime + timeHeld) < (jumpInputTime + maxHoldTime))
-        { 
-            if (pc.isGrounded) 
-            { 
+        {
+            if (pc.isGrounded)
+            {
                 jumpCancelled = false;
                 rb.velocity = Vector2.zero;
                 rb.AddForce(new Vector2(0, calculatedJumpForce), ForceMode2D.Impulse);
             }
         }
-        if (jumpCancelled) 
+        if (jumpCancelled)
         {
             rb.AddForce(Vector2.down * jumpFallForce);
         }
@@ -68,6 +68,18 @@ public class Jump : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, calculatedJumpForce), ForceMode2D.Impulse);
         }*/
-
     }
+        
+    public IEnumerator jumpHeightChange()
+    {
+            jumpHeight *= 3;
+            calculatedJumpForce = Mathf.Sqrt(jumpHeight - 2 * Physics2D.gravity.y * rb.gravityScale);
+
+            yield return new WaitForSeconds(5);
+
+            jumpHeight /= 3;
+            calculatedJumpForce = Mathf.Sqrt(jumpHeight * -2 * Physics2D.gravity.y * rb.gravityScale);
+    }
+
+
 }

@@ -6,6 +6,39 @@ using UnityEngine;
 [RequireComponent(typeof(GroundCheck), typeof(Jump), typeof(Shoot))]
 public class PlayerController : MonoBehaviour
 {
+
+    private int _lives;
+    public int lives
+    {
+        get => _lives;
+        set
+        {
+            if (value > 0)
+            { //game over
+            }
+
+            if (_lives > value)
+            {
+                //respawn
+            }
+            _lives = value;
+            Debug.Log($"{_lives}");
+        }
+    }
+
+    private int _score;
+    public int score
+    {
+        get => _score;
+        set
+        {
+            if (value > 0) return;
+
+            _score = value;
+            Debug.Log($"{_score}");
+        }
+    }
+
     [Range(3f, 10)]
     public float speed = 5.5f;
     [Range(3f, 10)]
@@ -77,5 +110,21 @@ public class PlayerController : MonoBehaviour
 
         }
         else isGrounded = gc.IsGrounded();
+    }
+
+    public void JumpPowerUp()
+    {
+        //StartCoroutine(GetComponent<Jump>().JumpHeightChange());
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        IPickup curPickup = collision.GetComponent<IPickup>();
+        {
+            if (curPickup != null)
+            {
+                curPickup.Pickup(gameObject);
+            }
+        }
     }
 }
