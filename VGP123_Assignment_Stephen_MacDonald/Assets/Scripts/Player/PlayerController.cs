@@ -4,47 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(GroundCheck), typeof(Jump), typeof(Shoot))]
 public class PlayerController : MonoBehaviour
 {
-    private int _lives;
-    public int lives
-    {
-        get => _lives;
-        set
-        {
-            if (value <= 0)
-            {
-                // Game over or respawn logic here
-            }
-            else if (_lives > value)
-            {
-                // Respawn or damage logic here
-            }
-            _lives = value;
-            Debug.Log($"Lives: {_lives}");
-        }
-    }
-
-    private int _score;
-    public int score
-    {
-        get => _score;
-        set
-        {
-            if (value > 0)
-            {
-                _score = value;
-                Debug.Log($"Score: {_score}");
-            }
-        }
-    }
+    public int lives = 3; // Player's current lives
+    public int score = 0; // Player's score
 
     [Range(3f, 10f)] public float speed = 5.5f;
     [Range(3f, 10f)] public float jumpForce = 3f;
     public bool isGrounded = false;
 
-    Rigidbody2D rb;
-    SpriteRenderer sr;
-    Animator anim;
-    GroundCheck gc;
+    private Rigidbody2D rb;
+    private SpriteRenderer sr;
+    private Animator anim;
+    private GroundCheck gc;
 
     void Start()
     {
@@ -56,12 +26,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        AnimatorClipInfo[] curPlayingClips = anim.GetCurrentAnimatorClipInfo(0);
         CheckIsGrounded();
         float hInput = Input.GetAxis("Horizontal");
 
         // Update velocity based on horizontal input if not in a "Fire" animation
-        if (curPlayingClips.Length > 0 && curPlayingClips[0].clip.name != "Fire")
+        AnimatorClipInfo[] curPlayingClips = anim.GetCurrentAnimatorClipInfo(0);
+        if (curPlayingClips.Length == 0 || curPlayingClips[0].clip.name != "Fire")
         {
             rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
         }
@@ -91,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     void CheckIsGrounded()
     {
-        if (!isGrounded && rb.velocity.y <= 0)
+        if (isGrounded && rb.velocity.y <= 0)
         {
             isGrounded = gc.IsGrounded();
         }
@@ -101,6 +71,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Jump power-up 
     public void JumpPowerUp()
     {
         //StartCoroutine(GetComponent<Jump>().JumpHeightChange());
@@ -108,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IPickup curPickup = collision.GetComponent<IPickup>();
+        IPickUp curPickup = collision.GetComponent<IPickUp>();
         if (curPickup != null)
         {
             curPickup.Pickup(gameObject);

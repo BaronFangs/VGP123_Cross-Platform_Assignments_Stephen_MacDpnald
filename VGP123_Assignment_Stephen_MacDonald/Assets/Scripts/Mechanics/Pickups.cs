@@ -1,14 +1,8 @@
 using UnityEngine;
 
-public interface IPickup
-{
-    public void Pickup(GameObject Player);
-}
-
-
-
 public class Pickups : MonoBehaviour
 {
+    // Define types of pickups
     public enum PickupType
     {
         Life,
@@ -17,34 +11,47 @@ public class Pickups : MonoBehaviour
         Score
     }
 
-    public PickupType type;
+    public PickupType type; // Set this in the Inspector
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    // Trigger detection when the player collides with this pickup
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player")) // Check if the colliding object is the player
         {
-            PlayerController pc = collision.gameObject.GetComponent<PlayerController>();
-
-            switch (type)
+            PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
+            if (playerController != null)
             {
-                case PickupType.Life:
-                    pc.lives++;
-                    break;
-                case PickupType.JumpBoost:
-                    pc.JumpPowerUp();
-                    break;
-                case PickupType.Shrink: break;
-                case PickupType.Score:
-                    pc.score++;
-                    break;
+                ApplyPickupEffect(playerController); // Apply effect based on type
             }
-            Destroy(gameObject);
+
+            Destroy(gameObject); // Destroy the pickup after collection
+        }
+    }
+
+    // Apply the pickup effect based on the type
+    private void ApplyPickupEffect(PlayerController player)
+    {
+        switch (type)
+        {
+            case PickupType.Life:
+                player.lives++; // Increase player's lives
+                Debug.Log("Picked up a Life! Lives: " + player.lives);
+                break;
+
+            case PickupType.JumpBoost:
+                player.JumpPowerUp(); // Trigger the jump boost power-up
+                Debug.Log("Picked up a Jump Boost!");
+                break;
+
+            case PickupType.Shrink:
+                // Implement shrink effect here if applicable
+                Debug.Log("Picked up Shrink (implement effect here)");
+                break;
+
+            case PickupType.Score:
+                player.score++; // Increase player's score
+                Debug.Log("Picked up Score! Score: " + player.score);
+                break;
         }
     }
 }
