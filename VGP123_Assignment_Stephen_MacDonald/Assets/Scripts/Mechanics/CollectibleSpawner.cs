@@ -1,24 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectibleSpawner : MonoBehaviour
+public class RandomSpawn : MonoBehaviour
 {
-    public List<Transform> spawnPoints; // Assign 5 Transform points in the Unity editor for spawn locations
-    public List<GameObject> collectiblePrefabs; // Assign collectible prefabs in the editor
-
+    public GameObject[] spawnPrefabs;
+    // Start is called before the first frame update
     void Start()
     {
-        SpawnCollectibles();
-    }
+        int randNum = Random.Range(0, spawnPrefabs.Length);
+        GameObject spawnObj = spawnPrefabs[randNum];
 
-    void SpawnCollectibles()
-    {
-        foreach (Transform spawnPoint in spawnPoints)
-        {
-            // Randomly select a collectible prefab from the list
-            GameObject collectible = collectiblePrefabs[Random.Range(0, collectiblePrefabs.Count)];
-            // Instantiate the collectible at the spawn point location
-            Instantiate(collectible, spawnPoint.position, Quaternion.identity);
-        }
+        Instantiate(spawnObj, transform.position, Quaternion.identity);
     }
 }

@@ -1,47 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
     SpriteRenderer sr;
-    public Vector2 initialShotVelocity;
-    public Transform spawnPointLeft;
+
+    public Vector2 initalShotVelocity = Vector2.zero;
+
     public Transform spawnPointRight;
+    public Transform spawnPointLeft;
+
     public Projectile projectilePrefab;
 
+    // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
 
-        // Check default values and log warnings if necessary
-        if (initialShotVelocity == Vector2.zero)
+        if (initalShotVelocity == Vector2.zero)
         {
-            Debug.LogWarning("Initial shot velocity is zero; setting to a default value");
-            initialShotVelocity.x = 7.0f; // Default horizontal velocity
+            Debug.Log("Initial shot velocity is zero, changing it to a default value");
+            initalShotVelocity.x = 7.0f;
         }
 
         if (!spawnPointLeft || !spawnPointRight || !projectilePrefab)
-        {
-            Debug.LogWarning($"Please set all required references on the Shoot script for {gameObject.name}");
-        }
+            Debug.Log($"Please set default values on the shoot script for {gameObject.name}");
     }
 
     public void Fire()
     {
-        Vector2 shotVelocity = initialShotVelocity;
-
-        if (sr.flipX)
+        if (!sr.flipX)
         {
-            // Facing left
-            shotVelocity.x = -Mathf.Abs(initialShotVelocity.x);
-            Projectile curProjectile = Instantiate(projectilePrefab, spawnPointLeft.position, spawnPointLeft.rotation);
-            curProjectile.SetVelocity(shotVelocity);
+            Projectile curProjectile = Instantiate(projectilePrefab, spawnPointRight.position, spawnPointRight.rotation);
+            
+            curProjectile.SetVelocity(new Vector2(initalShotVelocity.x, initalShotVelocity.y));
         }
         else
         {
-            // Facing right
-            shotVelocity.x = Mathf.Abs(initialShotVelocity.x);
-            Projectile curProjectile = Instantiate(projectilePrefab, spawnPointRight.position, spawnPointRight.rotation);
-            curProjectile.SetVelocity(shotVelocity);
+            Projectile curProjectile = Instantiate(projectilePrefab, spawnPointLeft.position, spawnPointLeft.rotation);
+            curProjectile.SetVelocity(new Vector2(-initalShotVelocity.x, initalShotVelocity.y));
         }
     }
 }
