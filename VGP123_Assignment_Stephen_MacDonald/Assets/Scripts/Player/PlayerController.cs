@@ -7,46 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(GroundCheck), typeof(Jump), typeof(Shoot))]
 public class PlayerController : MonoBehaviour
 {
-    private int _lives;
-    public int lives
-    {
-        get => _lives;
-        set
-        {
-            //do valid checking
-            if (value > 0)
-            { //gameover should be called here
-            }
-
-            if (_lives > value)
-            {
-                //respawn
-            }
-
-            _lives = value;
-            Debug.Log($"{_lives} lives left");
-        }
-    }
-
-    private int _score;
-    public int score
-    {
-        get => _score;
-        set
-        {
-            //this can't happen - the score can't be lower than zero so stop this from setting the score
-            if (value > 0) return;
-
-            _score = value;
-            Debug.Log($"Current Score: {_score}");
-        }
-    }
-
     //Component References
     Rigidbody2D rb;
     SpriteRenderer sr;
     Animator anim;
     GroundCheck gc;
+   // public AudioSource audioSource { get; private set; }
+
+    //
 
     //Movement variables
     [Range(3, 10)]
@@ -62,11 +30,16 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         gc = GetComponent<GroundCheck>();
+        //audioSource = GetComponent<AudioSource>();
+
+        //audioSource.outputAudioMixerGroup = GameManager.Instance.SFXGroup;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Time.timeScale <= 0) return;
+
         AnimatorClipInfo[] curPlayingClips = anim.GetCurrentAnimatorClipInfo(0);
         CheckIsGrounded();
         float hInput = Input.GetAxis("Horizontal");
@@ -105,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     public void JumpPowerup()
     {
-        StartCoroutine(GetComponent<Jump>().JumpHeightChange());
+        StartCoroutine(GetComponent<Jump>().jumpHeightChange());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -116,9 +89,10 @@ public class PlayerController : MonoBehaviour
             collision.gameObject.GetComponentInParent<Enemy>().TakeDamage(9999);
             rb.velocity = Vector2.zero;
             rb.AddForce(Vector2.up * bounceForce, ForceMode2D.Impulse);
+           // audioSource.PlayOneShot(stompSound);
         }
 
-        IPickup curPickup = collision.GetComponent<IPickup>();
+        IPickUp curPickup = collision.GetComponent<IPickUp>();
         if (curPickup != null)
         {
             curPickup.Pickup(gameObject);

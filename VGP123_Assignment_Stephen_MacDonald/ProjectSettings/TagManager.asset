@@ -8,6 +8,11 @@ TagManager:
   - Hill
   - Edge
   - Collectible
+  - Enemy
+  - Barrier
+  - PlayerProjectile
+  - EnemyProjectile
+  - Squish
   layers:
   - Default
   - TransparentFX
