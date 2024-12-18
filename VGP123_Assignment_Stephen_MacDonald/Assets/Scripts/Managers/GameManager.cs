@@ -10,8 +10,8 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
-    //public AudioMixerGroup SFXGroup;
-    //public AudioMixerGroup MusicGroup;
+    public AudioMixerGroup SFXGroup;
+    public AudioMixerGroup MusicGroup;
 
     [HideInInspector] public Action<int> OnLifeValueChanged;
     private static GameManager _instance;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     private Transform currentCheckpoint;
 
     [HideInInspector]
-    //public MenuController currentMenuController;
+    public MenuController currentMenuController;
 
 
     void Awake()

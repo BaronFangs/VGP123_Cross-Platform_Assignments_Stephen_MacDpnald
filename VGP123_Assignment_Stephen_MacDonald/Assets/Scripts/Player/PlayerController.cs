@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer sr;
     Animator anim;
     GroundCheck gc;
-   // public AudioSource audioSource { get; private set; }
+    public AudioSource audioSource { get; private set; }
 
     //
 
@@ -30,9 +30,9 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         gc = GetComponent<GroundCheck>();
-        //audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
-        //audioSource.outputAudioMixerGroup = GameManager.Instance.SFXGroup;
+        audioSource.outputAudioMixerGroup = GameManager.Instance.SFXGroup;
     }
 
     // Update is called once per frame

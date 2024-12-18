@@ -1,21 +1,20 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer), typeof(Animator), typeof(AudioSource))]
 public abstract class Enemy : MonoBehaviour
 {
-    //private - private to the class that created it.  Only a property of the class - nobody else can access it, not even inherited classes.
-    //protected - private but also accessable to inherited classes.
-    //public - it's a party and everyones invited. Any object that has reference to this class can access this property.
-
     protected SpriteRenderer sr;
     protected Animator anim;
     protected int health;
     [SerializeField] protected int maxHealth;
+    [SerializeField] private AudioClip deathSound;
+    private AudioSource audioSource;
 
     public virtual void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         if (maxHealth <= 0) maxHealth = 5;
 
@@ -28,6 +27,12 @@ public abstract class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
+
+            if (deathSound != null)
+            {
+                audioSource.PlayOneShot(deathSound);
+            }
+
             anim.SetTrigger("Death");
 
             if (transform.parent != null) Destroy(transform.parent.gameObject, 0.5f);

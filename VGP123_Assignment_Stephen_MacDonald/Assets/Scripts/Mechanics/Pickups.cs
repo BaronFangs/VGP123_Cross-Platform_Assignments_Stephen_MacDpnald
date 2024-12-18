@@ -12,19 +12,19 @@ public class Pickups : MonoBehaviour
         Score
     }
 
-   // public AudioClip pickupSound;
+    public AudioClip pickupSound;
 
     public PickupType type;
     SpriteRenderer sr;
-    //AudioSource audioSource;
+    AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-       // audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
-       // audioSource.outputAudioMixerGroup = GameManager.Instance.SFXGroup;
+        audioSource.outputAudioMixerGroup = GameManager.Instance.SFXGroup;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -46,9 +46,9 @@ public class Pickups : MonoBehaviour
                     break;
             }
             sr.enabled = false;
-            //audioSource.PlayOneShot(pickupSound);
+            audioSource.PlayOneShot(pickupSound);
 
-            //Destroy(gameObject, pickupSound.length);
+            Destroy(gameObject, pickupSound.length);
         }
     }
 }
